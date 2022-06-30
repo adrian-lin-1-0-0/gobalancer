@@ -1,0 +1,32 @@
+{
+    "listeners":[
+        {
+            "healthcheck":10,
+            "algo":"round-robin",
+            "port":3001,
+            "ssl":false,
+            "ssl_certificate":"./server.crt",
+            "ssl_certificate_key":"./server.key",
+            "upstream":4001   
+        },
+        {
+            "port":3002,
+            "ssl":false,
+            "upstream":4002   
+        },
+        {
+            "port":3003,
+            "ssl":false,
+            "upstream":4003,
+            "algo":"ip-hash"
+        }
+    ],
+    "instances":[
+        {
+            "addr":"127.0.0.1"
+        },
+        {
+            "addr":"127.0.0.2"
+        }
+    ]
+}
