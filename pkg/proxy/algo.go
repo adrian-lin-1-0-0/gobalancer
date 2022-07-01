@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+const (
+	p = uint64(2654435761)
+)
+
 func randInt(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	return min + rand.Intn(max-min)
@@ -38,7 +42,7 @@ func roundRobin(l *listener, healthList []int) int {
 	return -1
 }
 
-func addr2Int(addr net.Addr) int {
+func addr2Int(addr net.Addr) uint64 {
 	ipAddrAndPort := strings.Split(addr.String(), ":")
 	//x.x.x.x
 	ipAddr := strings.Split(ipAddrAndPort[0], ".")
@@ -47,16 +51,12 @@ func addr2Int(addr net.Addr) int {
 	third, _ := strconv.Atoi(ipAddr[2])
 	fourth, _ := strconv.Atoi(ipAddr[3])
 
-	return first*16777216 + second*65536 + third*256 + fourth
-}
-
-func mod(a, b int) int {
-	return (a%b + b) % b
+	return uint64(first)*16777216 + uint64(second)*65536 + uint64(third)*256 + uint64(fourth)
 }
 
 func ipHash(remoteAddr net.Addr, healthList []int, n int) int {
 	ip := addr2Int(remoteAddr)
-	k := mod(ip*2654435761, n)
+	k := int(ip * p % uint64(n))
 	if k > healthList[len(healthList)-1] {
 		return healthList[0]
 	}
