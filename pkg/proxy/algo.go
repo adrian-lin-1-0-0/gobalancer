@@ -50,9 +50,13 @@ func addr2Int(addr net.Addr) int {
 	return first*16777216 + second*65536 + third*256 + fourth
 }
 
+func mod(a, b int) int {
+	return (a%b + b) % b
+}
+
 func ipHash(remoteAddr net.Addr, healthList []int, n int) int {
 	ip := addr2Int(remoteAddr)
-	k := ip * 2654435761 % n
+	k := mod(ip*2654435761, n)
 	if k > healthList[len(healthList)-1] {
 		return healthList[0]
 	}
