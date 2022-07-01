@@ -1,4 +1,4 @@
-##  A simple load balancer server written in GO 
+##  A simple tcp load balancer server written in GO 
 
 ### algo
 - rand
