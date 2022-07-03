@@ -1,4 +1,4 @@
-##  A simple load balancer server written in GO 
+##  A simple load balancer written in GO 
 
 ### Features
 - [ ] Protocol type
