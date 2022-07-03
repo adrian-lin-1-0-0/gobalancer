@@ -16,13 +16,15 @@ type ConfigData struct {
 }
 
 type Listener struct {
-	Port              int    `json:"port"`
-	SSL               bool   `json:"ssl"`
-	SSLCertificate    string `json:"ssl_certificate"`
-	SSLCertificateKey string `json:"ssl_certificate_key"`
-	Upstream          int    `json:"upstream"`
-	HealthCheck       int    `json:"healthcheck"`
-	Algo              string `json:"algo"`
+	Protocol            string `json:"protocol"`
+	Port                int    `json:"port"`
+	SSL                 bool   `json:"ssl"`
+	SSLCertificate      string `json:"ssl_certificate"`
+	SSLCertificateKey   string `json:"ssl_certificate_key"`
+	Upstream            int    `json:"upstream"`
+	HealthCheckInterval int    `json:"health_check_interval"`
+	Algo                string `json:"algo"`
+	Nagle               bool   `json:"nagle"`
 }
 
 type Instance struct {

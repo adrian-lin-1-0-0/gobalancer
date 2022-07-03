@@ -1,4 +1,4 @@
-package proxy
+package tcp
 
 import (
 	"net"
@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	//400ms, 0.4 seconds
 	pingTimeOut = time.Millisecond * 400
 )
 
@@ -16,12 +17,29 @@ type Instance struct {
 	Addr  net.TCPAddr
 }
 
-type Instances []Instance
+type Instances []*Instance
+
+func (instances *Instances) Add(instance *Instance) {
+	*instances = append(*instances, instance)
+}
+
+func NewInstance(addr net.TCPAddr) *Instance {
+	return &Instance{
+		Addr: addr,
+	}
+}
 
 func (instances *Instances) healthcheck() {
 	for i := 0; i < len(*instances); i++ {
 		(*instances)[i].heathcheck()
 	}
+}
+
+func (instance *Instance) isAlive() bool {
+	instance.RWMux.RLock()
+	defer instance.RWMux.RUnlock()
+	alive := instance.Alive
+	return alive
 }
 
 func (instance *Instance) heathcheck() {
@@ -33,13 +51,6 @@ func (instance *Instance) heathcheck() {
 	defer instance.RWMux.Unlock()
 	instance.Alive = isAlive
 	return
-}
-
-func (instance *Instance) isAlive() bool {
-	instance.RWMux.RLock()
-	defer instance.RWMux.RUnlock()
-	alive := instance.Alive
-	return alive
 }
 
 func healthcheck(addr net.TCPAddr) bool {

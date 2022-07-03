@@ -1,22 +1,28 @@
-##  A simple tcp load balancer server written in GO 
+##  A simple load balancer server written in GO 
 
-### algo
-- rand
-- round-robin
-- ip-hash
+### Features
+- [ ] Protocol type
+  - [x] TCP (HTTP/ HTTPS/ TCP over SSL)
+  - [ ] UDP
+- [x] Load balance algorithms
+  - [x] Random 
+  - [x] Round-robin
+  - [x] IP-hash 
 
-### listeners
+### Config
+#### listeners
 | Field | Type | Requirement | Description |
 | -- | -- | -- | -- |
 | port | number | required | |
-| ssl | boolean| required | enable ssl |
 | upstream | number| required | upstream port |
-| healthcheck | number| optional | seconds ; default : 30 seconds|
+| health_check_interval | number| optional | seconds ; default : 30 seconds|
+| ssl | boolean| optional | enable ssl ; default : false  |
 | ssl_certificate | string | optional| |
 | ssl_certificate_key | string | optional| |
 | algo| string | optional | rand, round-robin, ip-hash ;default : rand |
+| nagle | boolean | optional | https://networkencyclopedia.com/nagles-algorithm/ default : false |
 
-### instances
+#### instances
 
 | Field | Type | Requirement | Description |
 | -- | -- | -- | -- |
@@ -27,22 +33,21 @@ gobalancer.json
 {
     "listeners":[
         {
+            "nagle":false,
             "healthcheck":10,
             "algo":"round-robin",
             "port":3001,
-            "ssl":false,
+            "ssl":true,
             "ssl_certificate":"./server.crt",
             "ssl_certificate_key":"./server.key",
             "upstream":4001   
         },
         {
             "port":3002,
-            "ssl":false,
             "upstream":4002   
         },
         {
             "port":3003,
-            "ssl":false,
             "upstream":4003,
             "algo":"ip-hash"
         }

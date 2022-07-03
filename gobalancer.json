@@ -4,7 +4,7 @@
             "healthcheck":10,
             "algo":"round-robin",
             "port":3001,
-            "ssl":false,
+            "ssl":true,
             "ssl_certificate":"./server.crt",
             "ssl_certificate_key":"./server.key",
             "upstream":4001   
